@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zakat Calculator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 500px;
+            margin-top: 50px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-label {
+            font-size: 1.1rem;
+        }
+        @media (max-width: 576px) {
+            .container {
+                margin-top: 30px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <h2 class="mb-4" id="title">Zakat Calculator</h2>
+        <div class="mb-3">
+            <label for="language" class="form-label">Select Language</label>
+            <select id="language" class="form-select" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="ta">தமிழ்</option>
+                <option value="si">සිංහල</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="savings" class="form-label" id="savings-label">Total Savings (LKR)</label>
+            <input type="number" id="savings" class="form-control" placeholder="Enter total savings">
+        </div>
+        <div class="mb-3">
+            <label for="gold" class="form-label" id="gold-label">Value of Gold/Silver (LKR)</label>
+            <input type="number" id="gold" class="form-control" placeholder="Enter value of gold/silver">
+        </div>
+        <div class="mb-3">
+            <label for="debt" class="form-label" id="debt-label">Outstanding Debts (LKR)</label>
+            <input type="number" id="debt" class="form-control" placeholder="Enter total debts">
+        </div>
+        <button class="btn btn-primary w-100" onclick="calculateZakat()" id="calculate-btn">Calculate Zakat</button>
+        <h4 class="mt-4" id="result"></h4>
+    </div>
+
+    <script>
+        const translations = {
+            en: {
+                title: "Zakat Calculator",
+                savingsLabel: "Total Savings (LKR)",
+                goldLabel: "Value of Gold/Silver (LKR)",
+                debtLabel: "Outstanding Debts (LKR)",
+                calculateBtn: "Calculate Zakat",
+                notRequired: "You are not required to pay Zakat.",
+                zakatPayable: "Zakat Payable: LKR "
+            },
+            ta: {
+                title: "ஜக்காத் கணிப்பான்",
+                savingsLabel: "மொத்த சேமிப்பு (LKR)",
+                goldLabel: "தங்கம்/வெள்ளியின் மதிப்பு (LKR)",
+                debtLabel: "நிலுவை கடன் (LKR)",
+                calculateBtn: "ஜக்காத் கணிக்கவும்",
+                notRequired: "நீங்கள் ஜக்காத் செலுத்த வேண்டியதில்லை.",
+                zakatPayable: "ஜக்காத் செலுத்த வேண்டிய தொகை: LKR "
+            },
+            si: {
+                title: "සකත් ගණනය කිරීම",
+                savingsLabel: "මුළු ඉතිරිකිරීම් (LKR)",
+                goldLabel: "රන්/රන්ගලගේ වටිනාකම (LKR)",
+                debtLabel: "නිෂ්කලංක ණය (LKR)",
+                calculateBtn: "සකත් ගණනය කරන්න",
+                notRequired: "ඔබ සකත් ගෙවීම අනිවාර්ය නැත.",
+                zakatPayable: "ගෙවිය යුතු සකත් මුදල: LKR "
+            }
+        };
+
+        function changeLanguage() {
+            let lang = document.getElementById("language").value;
+            document.getElementById("title").innerText = translations[lang].title;
+            document.getElementById("savings-label").innerText = translations[lang].savingsLabel;
+            document.getElementById("gold-label").innerText = translations[lang].goldLabel;
+            document.getElementById("debt-label").innerText = translations[lang].debtLabel;
+            document.getElementById("calculate-btn").innerText = translations[lang].calculateBtn;
+        }
+
+        function calculateZakat() {
+            let savings = parseFloat(document.getElementById("savings").value) || 0;
+            let gold = parseFloat(document.getElementById("gold").value) || 0;
+            let debt = parseFloat(document.getElementById("debt").value) || 0;
+            
+            let netWealth = savings + gold - debt;
+            let nisab = 850000; // Approximate Nisab value in LKR (varies)
+            let lang = document.getElementById("language").value;
+            
+            if (netWealth >= nisab) {
+                let zakat = netWealth * 0.025;
+                document.getElementById("result").innerHTML = translations[lang].zakatPayable + zakat.toFixed(2);
+            } else {
+                document.getElementById("result").innerHTML = translations[lang].notRequired;
+            }
+        }
+    </script>
+</body>
+</html>
